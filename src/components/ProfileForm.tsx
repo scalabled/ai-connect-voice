@@ -15,6 +15,7 @@ const ProfileForm = () => {
   const [isVoiceWizardOpen, setIsVoiceWizardOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
+    phone: "",
     location: "",
     industry: "",
     profession: "",
@@ -63,21 +64,22 @@ const ProfileForm = () => {
         <div className="text-center mb-12">
           <h2 className="heading-section mb-4">Create Your Community Profile</h2>
           <p className="text-community max-w-2xl mx-auto mb-6">
-            Fill out the form below and our AI agent will call you for a personalized 
-            interview to complete your profile and find the best connections.
+            Provide your phone number and our AI agent will call you within 24 hours for a personalized 
+            5-minute interview to complete your profile and find the best connections.
           </p>
           
-          <div className="flex justify-center gap-4">
-            <Button 
-              onClick={() => setIsVoiceWizardOpen(true)}
-              className="btn-hero"
-              size="lg"
-            >
-              <Bot className="w-5 h-5 mr-2" />
-              Start Voice Wizard
-            </Button>
-            <p className="text-sm text-muted-foreground self-center">
-              or fill out manually below
+          <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 max-w-md mx-auto mb-6">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                <Bot className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-primary">AI Phone Interview</h3>
+                <p className="text-sm text-muted-foreground">Powered by ElevenLabs</p>
+              </div>
+            </div>
+            <p className="text-sm text-center text-muted-foreground">
+              Skip the long form - just provide your phone number and let our AI agent call you for a quick, personalized interview.
             </p>
           </div>
         </div>
@@ -108,6 +110,27 @@ const ProfileForm = () => {
                   />
                 </div>
                 <div className="space-y-2">
+                  <Label htmlFor="phone" className="flex items-center gap-2">
+                    <Bot className="w-4 h-4 text-primary" />
+                    Phone Number
+                  </Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData(prev => ({...prev, phone: e.target.value}))}
+                    className="form-input"
+                    placeholder="+1 (555) 123-4567"
+                    required
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Our AI agent will call this number for your interview
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
                   <Label htmlFor="location" className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-primary" />
                     Location
@@ -121,6 +144,7 @@ const ProfileForm = () => {
                     required
                   />
                 </div>
+                <div></div>
               </div>
 
               {/* Professional Information */}
@@ -247,16 +271,36 @@ const ProfileForm = () => {
 
               {/* AI Voice Call CTA */}
               <div className="bg-primary/5 border border-primary/20 rounded-lg p-6 text-center">
-                <Mic className="w-12 h-12 text-primary mx-auto mb-4" />
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <Bot className="w-12 h-12 text-primary" />
+                  <div className="text-left">
+                    <p className="text-xs text-muted-foreground">Powered by</p>
+                    <p className="text-sm font-semibold text-primary">ElevenLabs AI</p>
+                  </div>
+                </div>
                 <h3 className="text-lg font-semibold text-primary mb-2">
-                  Next: AI Voice Interview
+                  AI Agent Will Call You
                 </h3>
                 <p className="text-sm text-muted-foreground mb-4">
-                  After submitting this form, our AI agent will call you within 24 hours 
+                  After submitting, our advanced AI agent will call your phone number within 24 hours 
                   for a personalized 5-minute interview to complete your profile and find your best matches.
                 </p>
+                <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4">
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>Natural conversation</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>5 minutes max</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span>No voicemail</span>
+                  </div>
+                </div>
                 <Button type="submit" className="btn-hero">
-                  Submit & Schedule AI Interview
+                  Submit & Schedule AI Call
                 </Button>
               </div>
             </form>
