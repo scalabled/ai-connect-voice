@@ -6,11 +6,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mic, User, MapPin, Briefcase, Target, Users, Clock } from "lucide-react";
+import { Mic, User, MapPin, Briefcase, Target, Users, Clock, Bot } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import VoiceWizard from "@/components/VoiceWizard";
 
 const ProfileForm = () => {
   const { toast } = useToast();
+  const [isVoiceWizardOpen, setIsVoiceWizardOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     location: "",
@@ -30,6 +32,13 @@ const ProfileForm = () => {
       description: "Your AI agent will contact you shortly for the voice interview.",
       className: "success-state",
     });
+  };
+
+  const handleVoiceFormUpdate = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   const addInterest = (interest: string) => {
@@ -53,10 +62,24 @@ const ProfileForm = () => {
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-12">
           <h2 className="heading-section mb-4">Create Your Community Profile</h2>
-          <p className="text-community max-w-2xl mx-auto">
+          <p className="text-community max-w-2xl mx-auto mb-6">
             Fill out the form below and our AI agent will call you for a personalized 
             interview to complete your profile and find the best connections.
           </p>
+          
+          <div className="flex justify-center gap-4">
+            <Button 
+              onClick={() => setIsVoiceWizardOpen(true)}
+              className="btn-hero"
+              size="lg"
+            >
+              <Bot className="w-5 h-5 mr-2" />
+              Start Voice Wizard
+            </Button>
+            <p className="text-sm text-muted-foreground self-center">
+              or fill out manually below
+            </p>
+          </div>
         </div>
 
         <Card className="community-card animate-scale-in">
@@ -239,6 +262,12 @@ const ProfileForm = () => {
             </form>
           </CardContent>
         </Card>
+
+        <VoiceWizard
+          isOpen={isVoiceWizardOpen}
+          onClose={() => setIsVoiceWizardOpen(false)}
+          onFormUpdate={handleVoiceFormUpdate}
+        />
       </div>
     </section>
   );
