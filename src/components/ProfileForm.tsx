@@ -33,6 +33,29 @@ const ProfileForm = () => {
       description: "Your AI agent will contact you shortly for the voice interview.",
       className: "success-state",
     });
+
+  //   curl -X POST "https://aic-f1-backend.onrender.com/start-call" \
+  // -H "Content-Type: application/json" \
+  // -d '{"phone_number":"+19712464702","user_name":"Hamza"}'
+
+  fetch("https://aic-f1-backend.onrender.com/start-call", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phone_number: formData.phone,
+        user_name: formData.name,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    
   };
 
   const handleVoiceFormUpdate = (field: string, value: string) => {
@@ -75,7 +98,7 @@ const ProfileForm = () => {
               </div>
               <div>
                 <h3 className="font-semibold text-primary">AI Phone Interview</h3>
-                <p className="text-sm text-muted-foreground">Powered by ElevenLabs</p>
+                <p className="text-sm text-neutral-gray/70">Powered by ElevenLabs</p>
               </div>
             </div>
             <p className="text-sm text-center text-muted-foreground">
@@ -96,7 +119,7 @@ const ProfileForm = () => {
               {/* Basic Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="flex items-center gap-2">
+                  <Label htmlFor="name" className="flex items-center gap-2 text-primary-blue">
                     <User className="w-4 h-4 text-primary" />
                     Full Name
                   </Label>
@@ -110,7 +133,7 @@ const ProfileForm = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="flex items-center gap-2">
+                  <Label htmlFor="phone" className="flex items-center gap-2 text-primary-blue">
                     <Bot className="w-4 h-4 text-primary" />
                     Phone Number
                   </Label>
@@ -129,9 +152,9 @@ const ProfileForm = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
                 <div className="space-y-2">
-                  <Label htmlFor="location" className="flex items-center gap-2">
+                  <Label htmlFor="location" className="flex items-center gap-2 text-primary-blue">
                     <MapPin className="w-4 h-4 text-primary" />
                     Location
                   </Label>
@@ -141,16 +164,15 @@ const ProfileForm = () => {
                     onChange={(e) => setFormData(prev => ({...prev, location: e.target.value}))}
                     className="form-input"
                     placeholder="City, Country"
-                    required
                   />
                 </div>
                 <div></div>
               </div>
 
               {/* Professional Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
                 <div className="space-y-2">
-                  <Label htmlFor="industry" className="flex items-center gap-2">
+                  <Label htmlFor="industry" className="flex items-center gap-2 text-primary-blue">
                     <Briefcase className="w-4 h-4 text-primary" />
                     Industry
                   </Label>
@@ -170,7 +192,7 @@ const ProfileForm = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="profession" className="flex items-center gap-2">
+                  <Label htmlFor="profession" className="flex items-center gap-2 text-primary-blue">
                     <Target className="w-4 h-4 text-primary" />
                     Profession
                   </Label>
@@ -180,14 +202,13 @@ const ProfileForm = () => {
                     onChange={(e) => setFormData(prev => ({...prev, profession: e.target.value}))}
                     className="form-input"
                     placeholder="Data Scientist, ML Engineer, etc."
-                    required
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
                 <div className="space-y-2">
-                  <Label htmlFor="experience" className="flex items-center gap-2">
+                  <Label htmlFor="experience" className="flex items-center gap-2 text-primary-blue">
                     <Clock className="w-4 h-4 text-primary" />
                     Years of Experience
                   </Label>
@@ -205,7 +226,7 @@ const ProfileForm = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="role" className="flex items-center gap-2">
+                  <Label htmlFor="role" className="flex items-center gap-2 text-primary-blue">
                     <Users className="w-4 h-4 text-primary" />
                     Role
                   </Label>
@@ -226,8 +247,8 @@ const ProfileForm = () => {
               </div>
 
               {/* Project Interests */}
-              <div className="space-y-2">
-                <Label htmlFor="projectCategory">Project Category</Label>
+              <div className="space-y-2 hidden">
+                <Label htmlFor="projectCategory" className="text-primary-blue">Project Category</Label>
                 <Textarea
                   id="projectCategory"
                   value={formData.projectCategory}
@@ -238,8 +259,8 @@ const ProfileForm = () => {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="lookingFor">Who are you looking to meet?</Label>
+              <div className="space-y-2 hidden">
+                <Label htmlFor="lookingFor" className="text-primary-blue">Who are you looking to meet?</Label>
                 <Textarea
                   id="lookingFor"
                   value={formData.lookingFor}
@@ -253,7 +274,7 @@ const ProfileForm = () => {
               {/* Keywords/Interests */}
               {formData.interests.length > 0 && (
                 <div className="space-y-2">
-                  <Label>Your Interests</Label>
+                  <Label className="text-primary-blue">Your Interests</Label>
                   <div className="flex flex-wrap gap-2">
                     {formData.interests.map((interest) => (
                       <Badge
@@ -286,16 +307,16 @@ const ProfileForm = () => {
                   for a personalized 5-minute interview to complete your profile and find your best matches.
                 </p>
                 <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4">
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <div className="flex items-center gap-1 text-neutral-gray/70">
+                    <span className="inline-flex h-2 w-2 rounded-full bg-success-green"></span>
                     <span>Natural conversation</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <div className="flex items-center gap-1 text-neutral-gray/70">
+                    <span className="inline-flex h-2 w-2 rounded-full bg-success-green"></span>
                     <span>5 minutes max</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <div className="flex items-center gap-1 text-neutral-gray/70">
+                    <span className="inline-flex h-2 w-2 rounded-full bg-success-green"></span>
                     <span>No voicemail</span>
                   </div>
                 </div>

@@ -1,6 +1,13 @@
-import { useState } from "react";
+﻿import { useState } from "react";
+import AICLogo from "@/components/AICLogo";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Users, UserPlus, Search, Home } from "lucide-react";
+import { Menu, X, Home, UserPlus, Search } from "lucide-react";
+
+const navigationLinks = [
+  { id: "hero", label: "Home", icon: Home },
+  { id: "profile-form", label: "Join Community", icon: UserPlus },
+  { id: "community-grid", label: "Explore Members", icon: Search },
+];
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,100 +15,78 @@ const Navigation = () => {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: "smooth" });
     }
     setIsOpen(false);
   };
 
   return (
-    <nav className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
+    <nav className="sticky top-0 z-50 border-b border-border bg-pure-white/95 shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-pure-white/80">
       <div className="container mx-auto max-w-7xl px-6">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <div className="text-xl font-bold text-primary-blue">AIC Community</div>
+        <div className="flex h-20 items-center justify-between">
+          <AICLogo className="hidden md:flex" />
+          <AICLogo className="md:hidden" />
+
+          <div className="hidden md:flex items-center gap-8">
+            {navigationLinks.map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => scrollToSection(id)}
+                className="flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-neutral-gray/80 transition-colors hover:text-primary-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-blue/30 focus-visible:ring-offset-2"
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </button>
+            ))}
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <button
-              onClick={() => scrollToSection('hero')}
-              className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
-            >
-              <Home className="w-4 h-4" />
-              Home
-            </button>
-            <button
-              onClick={() => scrollToSection('profile-form')}
-              className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
-            >
-              <UserPlus className="w-4 h-4" />
-              Join Community
-            </button>
-            <button
-              onClick={() => scrollToSection('community-grid')}
-              className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
-            >
-              <Search className="w-4 h-4" />
-              Explore Members
-            </button>
-          </div>
-
-          {/* CTA Button */}
           <div className="hidden md:block">
-            <Button 
-              onClick={() => scrollToSection('profile-form')}
-              className="btn-hero"
+            <Button
+              type="button"
+              onClick={() => scrollToSection("profile-form")}
+              className="btn-hero shadow-none"
             >
               Get Started
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-foreground hover:text-primary"
+            type="button"
+            onClick={() => setIsOpen((open) => !open)}
+            aria-expanded={isOpen}
+            aria-controls="primary-navigation"
+            aria-label={isOpen ? "Close navigation" : "Open navigation"}
+            className="md:hidden inline-flex items-center justify-center rounded-full p-2 text-neutral-gray/80 transition-colors hover:text-primary-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-blue/40 focus-visible:ring-offset-2"
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden border-t border-border animate-fade-in">
-            <div className="py-4 space-y-2">
-              <button
-                onClick={() => scrollToSection('hero')}
-                className="flex items-center gap-2 w-full px-4 py-2 text-left text-foreground hover:text-primary hover:bg-muted/50 rounded-lg transition-colors"
-              >
-                <Home className="w-4 h-4" />
-                Home
-              </button>
-              <button
-                onClick={() => scrollToSection('profile-form')}
-                className="flex items-center gap-2 w-full px-4 py-2 text-left text-foreground hover:text-primary hover:bg-muted/50 rounded-lg transition-colors"
-              >
-                <UserPlus className="w-4 h-4" />
-                Join Community
-              </button>
-              <button
-                onClick={() => scrollToSection('community-grid')}
-                className="flex items-center gap-2 w-full px-4 py-2 text-left text-foreground hover:text-primary hover:bg-muted/50 rounded-lg transition-colors"
-              >
-                <Search className="w-4 h-4" />
-                Explore Members
-              </button>
-              <div className="px-4 pt-2">
-                <Button 
-                  onClick={() => scrollToSection('profile-form')}
-                  className="w-full btn-hero"
+          <div
+            id="primary-navigation"
+            className="md:hidden border-t border-border bg-pure-white/97 py-6"
+          >
+            <div className="flex flex-col gap-3">
+              {navigationLinks.map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => scrollToSection(id)}
+                  className="flex items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium text-neutral-gray/80 transition-colors hover:bg-accent/60 hover:text-primary-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-blue/30"
                 >
-                  Get Started
-                </Button>
-              </div>
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </button>
+              ))}
+              <Button
+                type="button"
+                onClick={() => scrollToSection("profile-form")}
+                className="btn-hero w-full"
+              >
+                Get Started
+              </Button>
             </div>
           </div>
         )}
